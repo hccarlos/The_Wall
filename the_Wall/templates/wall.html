@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Success page</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="wall.css">
+</head>
+<body>
+	
+	<h5>Welcome, {{user['first_name']}} {{user['last_name']}} !!</h5>
+	<hr>
+	
+
+	<h3>Post a message</h3>
+	<form action="/wall/post_message" method="post">
+		<textarea cols="100" rows="3" name="message"></textarea>
+		<input type="submit" name="post_message_button" value="Post Message">
+	</form>
+	<hr>
+
+	{% for messages in all_usermessages %}
+		<p>Author: {{messages['first_name']}} {{messages['last_name']}} Posted on: {{messages['created_at']}}</p>
+		<p>{{messages['message']}}</p>
+		{% for comment in all_usercomments %}
+			{% if comment['messages_id'] == messages['messageID'] %}
+				<p>{{comment['first_name']}} {{comment['last_name']}}
+				Commented on ({{comment['created_at']}})</p>
+				<p>{{comment['comment']}}</p>
+			{% endif %}
+		{% endfor %}
+
+		<form action="/wall/{{messages['messageID']}}/post_comment" method="post">
+			<textarea cols ="30" rows="3" name="comment">Post your comments. </textarea>
+			<input type="submit" name="comments_button" value="Post Comment">
+		</form>
+
+		<hr>
+	{% endfor %}
+
+</body>
+</html>
